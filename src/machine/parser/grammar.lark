@@ -1,0 +1,48 @@
+?start          : program
+
+program         : definition*
+
+?definition     : ID "=" expr
+
+?expr           : definition ";" expr   -> let
+                | "ꟛ" ID ":" expr       -> fn
+                | "ꟛ" args ":" expr     -> fn_args
+                | expr expr             -> apply
+                | expr "," expr         -> pair
+                | "..."                 -> hole
+                | expr "." INT          -> get_item
+                | expr "." ID           -> get_field
+                | "." ID                -> select_field
+                | "+" ID                -> add_field
+                | "-" ID                -> remove_field
+                | ID                    -> var
+                | INT                   -> int
+                | FLOAT                 -> float
+                | STRING                -> string
+                | REF                   -> ref
+                | TAG                   -> tag
+                | expr ":" expr         -> cons
+                | match_expr 
+                | "{" fields "}"        -> record
+                | "[" [ items ] "]"     -> list
+                | "(" expr ")"
+
+match_expr      : "match" expr "{" cases "}"
+cases           : (case ";")* no_case ";"
+                | (case ";")+
+
+case            : expr "->" expr
+
+items           : expr ("," expr)* ","?    
+fields          : ID ":" expr ("," ID ":" expr)* ","?
+args            : "(" ID ("," ID)* ","? ")"
+
+COMMENT         : "//" /.*?\n/
+ID              : /[a-zA-Z_][a-zA-Z0-9_]*/
+INT             : /[0-9]+/
+FLOAT           : /[0-9]+\.[0-9]+/
+STRING          : /"([^"\\]|\\.)*"/
+REF             : "$" ID
+TAG             : ":" ID
+
+%ignore /\s/ COMMENT
