@@ -4,7 +4,7 @@ Simple lambda calculator
 # Untyped syntax
 
 * Atoms: `true, false, nil, 1i32, 42u, -1, 3.14, 3.14f32, "foo"`
-* Lambdas: `ꟛ x: y` e `ꟛ x y: z` => `ꟛ x: ꟛ y: z`
+* Lambdas: `ꟛ x: y` e `ꟛ x y: z` => `ꟛ x: ꟛ y: z` (or fn instead of ꟛ)
 * Apply: `f x` or `x | f`
 * Let: `x = y; expr`
 * Holes: `...`
